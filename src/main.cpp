@@ -6,6 +6,8 @@
 #include "tools.h"
 
 using namespace std;
+using Eigen::VectorXd;
+using Eigen::MatrixXd;
 
 // for convenience
 using json = nlohmann::json;
