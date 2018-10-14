@@ -44,26 +44,20 @@ FusionEKF::FusionEKF() {
         1, 1, 0, 0,
         1, 1, 1, 1;
 
-    noise_ax = 5;
-    noise_ay = 5;
+    // Noise covariances given as part of the project.
+    noise_ax = 9;
+    noise_ay = 9;
 }
 
 
 void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
-
     /*****************************************************************************
      *  Initialization
      ****************************************************************************/
     if (!is_initialized_) {
-        /**
-        TODO:
-          * Initialize the state ekf_.x_ with the first measurement.
-          * Create the covariance matrix.
-          * Remember: you'll need to convert radar from polar to cartesian coordinates.
-        */
         // first measurement
-        cout << "EKF: " << endl;
+        cout << "Initializing EKF ..." << endl;
         ekf_.x_ = VectorXd(4);
         ekf_.x_ << 1, 1, 1, 1;
 
@@ -88,7 +82,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
             Convert radar from polar to cartesian coordinates and initialize state.
             */
             const auto rho = measurement_pack.raw_measurements_(0);
-            const auto phi = measurement_pack.raw_measurements_(1);
+            const auto phi = Tools::ClampAngle(measurement_pack.raw_measurements_(1));
             const auto rho_dot = measurement_pack.raw_measurements_(2);
             const auto cos_phi = cos(phi);
             const auto sin_phi = sin(phi);
@@ -117,14 +111,6 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     /*****************************************************************************
      *  Prediction
      ****************************************************************************/
-
-    /**
-     TODO:
-       * Update the state transition matrix F according to the new elapsed time.
-        - Time is measured in seconds.
-       * Update the process noise covariance matrix.
-       * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
-     */
 
     // Determine elapsed time in seconds.
     const auto dt = (measurement_pack.timestamp_ - previous_timestamp_)/1000000.0;
@@ -158,7 +144,8 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
     if (measurement_pack.sensor_type_ == MeasurementPackage::SensorType::RADAR) {
         // Radar updates
         cout << "Processing RADAR ...." << endl;
-        ekf_.H_ = Tools::CalculateJacobian(ekf_.x_);
+        Hj_ = Tools::CalculateJacobian(ekf_.x_);
+        ekf_.H_ = Hj_;
         ekf_.R_ = R_radar_;
         ekf_.UpdateEKF(measurement_pack.raw_measurements_);
     } else {

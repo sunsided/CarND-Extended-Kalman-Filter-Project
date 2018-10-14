@@ -30,36 +30,10 @@ namespace {
         polar << rho, phi, rho_dot;
         return polar;
     }
-
-    /**
-     * Ensures that a given angle is in the -pi..pi range.
-     * @param phi The angle.
-     * @return The angle in -pi..pi range.
-     */
-    float clampAngle(float phi) {
-        const auto twoPi = 2 * M_PI;
-        while (phi > M_PI) {
-            phi -= twoPi;
-        }
-        while (phi < -M_PI) {
-            phi += twoPi;
-        }
-        return phi;
-    }
 }
 
 KalmanFilter::KalmanFilter() {
     I_ = MatrixXd::Identity(4, 4);
-}
-
-void KalmanFilter::Init(VectorXd &x_in, MatrixXd &P_in, MatrixXd &F_in,
-                        MatrixXd &H_in, MatrixXd &R_in, MatrixXd &Q_in) {
-    x_ = x_in;
-    P_ = P_in;
-    F_ = F_in;
-    H_ = H_in;
-    R_ = R_in;
-    Q_ = Q_in;
 }
 
 void KalmanFilter::Predict() {

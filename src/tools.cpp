@@ -15,6 +15,17 @@ namespace {
 
 namespace Tools {
 
+    float ClampAngle(float phi) {
+        const auto twoPi = 2 * M_PI;
+        while (phi > M_PI) {
+            phi -= twoPi;
+        }
+        while (phi < -M_PI) {
+            phi += twoPi;
+        }
+        return phi;
+    }
+
     VectorXd CalculateRMSE(const vector<VectorXd> &estimations,
                            const vector<VectorXd> &ground_truth) {
         VectorXd rmse(4);

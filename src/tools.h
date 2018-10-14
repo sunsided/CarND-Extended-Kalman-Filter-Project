@@ -6,6 +6,13 @@
 namespace Tools {
 
     /**
+     * Ensures that a given angle is in the -pi..pi range.
+     * @param phi The angle.
+     * @return The angle in -pi..pi range.
+     */
+    float ClampAngle(float phi);
+
+    /**
     * A helper method to calculate RMSE.
     */
     Eigen::VectorXd CalculateRMSE(const std::vector<Eigen::VectorXd> &estimations,
