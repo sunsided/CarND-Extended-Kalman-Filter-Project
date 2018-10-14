@@ -69,15 +69,14 @@ void KalmanFilter::Predict() {
 
 void KalmanFilter::Update(const VectorXd &z) {
     // Obtain prediction error
-    const auto z_pred = H_ * x_;
-    const auto y = z - z_pred;
+    const VectorXd z_pred = H_ * x_;
+    const VectorXd y = z - z_pred;
 
     // Determine Kalman gain
-    const auto Ht = H_.transpose();
-    const auto PHt = P_ * Ht;
-    const auto S = H_ * PHt + R_;
-    const auto Si = S.inverse();
-    const auto K = PHt * Si;
+    const MatrixXd Ht = H_.transpose();
+    const MatrixXd PHt = P_ * Ht;
+    const MatrixXd S = H_ * PHt + R_;
+    const MatrixXd K = PHt *  S.inverse();
 
     // Calculate new estimate
     x_ = x_ + (K * y);
@@ -86,12 +85,15 @@ void KalmanFilter::Update(const VectorXd &z) {
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
     // Obtain the prediction error
-    VectorXd y = z - cartesianToPolar(x_);
-    y[1] = clampAngle(y[1]);
+    const VectorXd z_pred = cartesianToPolar(x_);
+    VectorXd y = z - z_pred;
+    y[1] = Tools::ClampAngle(y[1]);
 
     // Determine Kalman gain (note that H_ has been externally set to the Jacobian!)
-    const auto S = H_ * P_ * H_.transpose() + R_;
-    const auto K = P_ * H_.transpose() * S.inverse();
+    const MatrixXd Ht = H_.transpose();
+    const MatrixXd PHt = P_ * Ht;
+    const MatrixXd S = H_ * PHt + R_;
+    const MatrixXd K = PHt * S.inverse();
 
     // Calculate new estimate
     x_ = x_ + (K * y);
