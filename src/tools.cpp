@@ -70,8 +70,8 @@ MatrixXd Tools::CalculateJacobian(const VectorXd& x_state) {
 
     // compute the Jacobian
     Hj << px_c2,                  py_c2,                  0,     0,
-        -(py*ic1),               (px*ic1),                0,     0,
-          py*(vx*py - vy*px)*ic3, px*(px*vy - py*vx)*ic3, px_c2, py_c2;
+            -(py*ic1),               (px*ic1),                0,     0,
+            py*(vx*py - vy*px)*ic3, px*(px*vy - py*vx)*ic3, px_c2, py_c2;
 
     return Hj;
 }
