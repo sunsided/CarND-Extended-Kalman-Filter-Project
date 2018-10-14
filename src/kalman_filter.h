@@ -53,6 +53,14 @@ public:
      */
     void UpdateEKF(const Eigen::VectorXd &z);
 
+private:
+
+    /**
+     * Updates the state by using Extended Kalman Filter equations
+     * @param y The measurement error at k+1
+     */
+    void UpdateInternal(const Eigen::VectorXd &y);
+
 };
 
 #endif /* KALMAN_FILTER_H_ */

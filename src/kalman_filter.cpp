@@ -46,15 +46,8 @@ void KalmanFilter::Update(const VectorXd &z) {
     const VectorXd z_pred = H_ * x_;
     const VectorXd y = z - z_pred;
 
-    // Determine Kalman gain
-    const MatrixXd Ht = H_.transpose();
-    const MatrixXd PHt = P_ * Ht;
-    const MatrixXd S = H_ * PHt + R_;
-    const MatrixXd K = PHt *  S.inverse();
-
-    // Calculate new estimate
-    x_ = x_ + (K * y);
-    P_ = (I_ - K * H_) * P_;
+    // Update the state prediction.
+    UpdateInternal(y);
 }
 
 void KalmanFilter::UpdateEKF(const VectorXd &z) {
@@ -63,7 +56,13 @@ void KalmanFilter::UpdateEKF(const VectorXd &z) {
     VectorXd y = z - z_pred;
     y[1] = Tools::ClampAngle(y[1]);
 
-    // Determine Kalman gain (note that H_ has been externally set to the Jacobian!)
+    // Update the state prediction.
+    UpdateInternal(y);
+}
+
+void KalmanFilter::UpdateInternal(const Eigen::VectorXd &y) {
+    // Determine Kalman gain. Note that H_ has been externally set to the Jacobian if
+    // the extended Kalman filter is used.
     const MatrixXd Ht = H_.transpose();
     const MatrixXd PHt = P_ * Ht;
     const MatrixXd S = H_ * PHt + R_;
