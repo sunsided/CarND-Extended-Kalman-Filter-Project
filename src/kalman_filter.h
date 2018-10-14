@@ -5,6 +5,12 @@
 class KalmanFilter {
 public:
 
+    /**
+     * Variable time steps are not currently used. When implementing them, we need to
+     * update the state transition matrix F_ accordingly.
+     */
+    static constexpr double TIMESTEPS_NOT_USED = 0;
+
     // state vector
     Eigen::VectorXd x_;
 
@@ -50,7 +56,7 @@ public:
      * using the process model
      * @param delta_T Time between k and k+1 in s
      */
-    void Predict();
+    void Predict(double delta_T);
 
     /**
      * Updates the state by using standard Kalman Filter equations

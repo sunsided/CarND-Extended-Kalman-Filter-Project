@@ -86,7 +86,7 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
        * Use noise_ax = 9 and noise_ay = 9 for your Q matrix.
      */
 
-    ekf_.Predict();
+    ekf_.Predict(KalmanFilter::TIMESTEPS_NOT_USED);
 
     /*****************************************************************************
      *  Update

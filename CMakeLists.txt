@@ -23,5 +23,5 @@ add_executable(ExtendedKF ${sources})
 
 target_link_libraries(ExtendedKF z ssl uv uWS)
 target_compile_features(ExtendedKF
-        PUBLIC cxx_std_11 cxx_defaulted_functions
+        PUBLIC cxx_std_11 cxx_defaulted_functions cxx_constexpr
         PRIVATE cxx_auto_type cxx_lambdas)

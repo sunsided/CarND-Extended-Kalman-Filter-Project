@@ -34,21 +34,20 @@ int main() {
     FusionEKF fusionEKF;
 
     // used to compute the RMSE later
-    Tools tools;
     vector<VectorXd> estimations;
     vector<VectorXd> ground_truth;
 
     h.onMessage(
-            [&fusionEKF, &tools, &estimations, &ground_truth](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
+            [&fusionEKF, &estimations, &ground_truth](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
                                                               uWS::OpCode opCode) {
                 // "42" at the start of the message means there's a websocket message event.
                 // The 4 signifies a websocket message
                 // The 2 signifies a websocket event
 
-                if (length && length > 2 && data[0] == '4' && data[1] == '2') {
+                if (length > 2 && data[0] == '4' && data[1] == '2') {
 
                     auto s = hasData(std::string(data));
-                    if (s != "") {
+                    if (!s.empty()) {
 
                         auto j = json::parse(s);
 
@@ -76,7 +75,7 @@ int main() {
                                 meas_package.raw_measurements_ << px, py;
                                 iss >> timestamp;
                                 meas_package.timestamp_ = timestamp;
-                            } else if (sensor_type.compare("R") == 0) {
+                            } else if (sensor_type == "R") {
 
                                 meas_package.sensor_type_ = MeasurementPackage::SensorType::RADAR;
                                 meas_package.raw_measurements_ = VectorXd(3);
@@ -119,7 +118,7 @@ int main() {
 
                             estimations.push_back(estimate);
 
-                            const auto rmse = tools.CalculateRMSE(estimations, ground_truth);
+                            const auto rmse = Tools::CalculateRMSE(estimations, ground_truth);
 
                             json msgJson;
                             msgJson["estimate_x"] = p_x;
