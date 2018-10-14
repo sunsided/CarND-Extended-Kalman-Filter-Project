@@ -35,7 +35,7 @@ private:
     // check whether the tracking toolbox was initialized or not (first measurement)
     bool is_initialized_;
 
-    // previous timestamp
+    // previous timestamp in microseconds
     long long previous_timestamp_;
 
     // tool object used to compute Jacobian and RMSE
@@ -43,6 +43,8 @@ private:
     Eigen::MatrixXd R_radar_;
     Eigen::MatrixXd H_laser_;
     Eigen::MatrixXd Hj_;
+    double noise_ax;
+    double noise_ay;
 };
 
 #endif /* FusionEKF_H_ */

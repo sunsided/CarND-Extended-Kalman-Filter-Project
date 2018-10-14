@@ -66,7 +66,7 @@ int main() {
                             string sensor_type;
                             iss >> sensor_type;
 
-                            if (sensor_type.compare("L") == 0) {
+                            if (sensor_type == "L") {
                                 meas_package.sensor_type_ = MeasurementPackage::SensorType::LASER;
                                 meas_package.raw_measurements_ = VectorXd(2);
                                 float px, py;
@@ -76,7 +76,6 @@ int main() {
                                 iss >> timestamp;
                                 meas_package.timestamp_ = timestamp;
                             } else if (sensor_type == "R") {
-
                                 meas_package.sensor_type_ = MeasurementPackage::SensorType::RADAR;
                                 meas_package.raw_measurements_ = VectorXd(3);
                                 float ro, theta, ro_dot;
