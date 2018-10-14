@@ -2,8 +2,6 @@ project(ExtendedKF)
 
 cmake_minimum_required (VERSION 3.5)
 
-add_definitions(-std=c++11)
-
 set(CXX_FLAGS "-Wall")
 set(CMAKE_CXX_FLAGS "${CXX_FLAGS}")
 
@@ -24,3 +22,6 @@ endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 add_executable(ExtendedKF ${sources})
 
 target_link_libraries(ExtendedKF z ssl uv uWS)
+target_compile_features(ExtendedKF
+        PUBLIC cxx_std_11 cxx_defaulted_functions cxx_constexpr
+        PRIVATE cxx_auto_type cxx_lambdas)

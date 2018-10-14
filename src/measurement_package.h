@@ -5,14 +5,23 @@
 
 class MeasurementPackage {
 public:
-  long long timestamp_;
+    /**
+     * Measurement timestamp in microseconds.
+     */
+    long long timestamp_;
 
-  enum SensorType{
-    LASER,
-    RADAR
-  } sensor_type_;
+    /**
+     * Type of the measurement, e.g. LIDAR or RADAR.
+     */
+    enum class SensorType{
+        LASER,
+        RADAR
+    } sensor_type_;
 
-  Eigen::VectorXd raw_measurements_;
+    /**
+     * The raw measurement values to be interpreted according to sensor type.
+     */
+    Eigen::VectorXd raw_measurements_;
 };
 
 #endif /* MEASUREMENT_PACKAGE_H_ */
